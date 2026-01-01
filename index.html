@@ -16,26 +16,34 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Inter', 'sans-serif'] },
-          colors: {
-            primary: '#22c55e', // Green from your profile pic
+          colors: { primary: '#22c55e' },
+          keyframes: {
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+            pulseGlow: { '0%,100%': { boxShadow: '0 0 20px rgba(34,197,94,0.3)' }, '50%': { boxShadow: '0 0 50px rgba(34,197,94,0.6)' } },
+            fadeInUp: { from: { opacity: 0, transform: 'translateY(30px)' }, to: { opacity: 1, transform: 'translateY(0)' } },
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            pulseGlow: 'pulseGlow 4s ease-in-out infinite',
+            fadeInUp: 'fadeInUp 0.8s ease-out forwards',
           }
         }
       }
     }
   </script>
   <style>
-    body { font-family: 'Inter', sans-serif; }
     .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); position: relative; overflow: hidden; }
     .dark .hero-bg { background: linear-gradient(135deg, #020617 0%, #0f172a 100%); }
-    .hero-bg::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%); animation: pulse 10s infinite; }
-    @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.3; } }
-    .fade-in { opacity: 0; transform: translateY(20px); transition: all 1s ease-out; }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
-    .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-    .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .orb { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(34,197,94,0.4), transparent); filter: blur(60px); animation: float 20s infinite ease-in-out; }
+    .orb-1 { width: 500px; height: 500px; top: -150px; left: -150px; animation-delay: 0s; }
+    .orb-2 { width: 700px; height: 700px; bottom: -250px; right: -250px; animation-delay: 8s; }
+    .orb-3 { width: 400px; height: 400px; top: 40%; left: 60%; animation-delay: 4s; }
+    .stagger { opacity: 0; animation: fadeInUp 0.8s ease-out forwards; }
+    .card-hover { transition: all 0.4s ease; }
+    .card-hover:hover { transform: translateY(-12px) scale(1.03); box-shadow: 0 20px 40px rgba(34,197,94,0.2); }
   </style>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100">
 
   <!-- Header -->
   <header class="fixed top-0 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-50 border-b border-gray-200 dark:border-slate-800">
@@ -45,8 +53,8 @@
         <a href="#features" class="hover:text-primary transition">Features</a>
         <a href="#comparison" class="hover:text-primary transition">Comparison</a>
         <a href="#other-apps" class="hover:text-primary transition">Other Apps</a>
-        <a href="https://x.com/femdemdev" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-primary transition" aria-label="X (Twitter)">
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.4 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <a href="https://x.com/femdemdev" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-primary transition">
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
       </nav>
       <button @click="document.documentElement.classList.toggle('dark')" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-800">
@@ -56,103 +64,107 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero-bg text-white pt-32 pb-20 px-6 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto text-center" x-data="{ visible: false }" x-init="setTimeout(() => visible = true, 300)">
-      <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight fade-in" :class="{ 'visible': visible }">
-        PocketWiki (PC)<br>Launching Soon
+  <section class="hero-bg text-white pt-32 pb-24 px-6 relative">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="max-w-7xl mx-auto text-center relative z-10">
+      <h1 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+        <span class="block stagger" style="animation-delay: 0.2s;">PocketWiki</span>
+        <span class="block stagger" style="animation-delay: 0.4s;">(PC)</span>
+        <span class="block stagger text-primary text-4xl md:text-6xl mt-4" style="animation-delay: 0.6s;">Launching Soon</span>
       </h1>
-      <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-4xl mx-auto fade-in" :class="{ 'visible': visible }" style="transition-delay: 0.2s;">
-        Revolutionize your knowledge management with the ultimate offline wiki for Windows.<br>
-        Native performance. Unmatched privacy. Interactive graph views. No cloud required.
+      <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto stagger" style="animation-delay: 0.8s;">
+        The ultimate offline personal wiki for Windows. Native speed. Absolute privacy. Interactive knowledge graph.
       </p>
-      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center fade-in" :class="{ 'visible': visible }" style="transition-delay: 0.4s;">
-        <a href="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" target="_blank" class="bg-primary text-white px-10 py-4 rounded-xl text-lg font-semibold hover:shadow-2xl transition transform hover:-translate-y-1 hover:bg-green-500">
+      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center stagger" style="animation-delay: 1s;">
+        <a href="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform" target="_blank" class="bg-primary text-white px-12 py-5 rounded-2xl text-xl font-bold hover:shadow-2xl transition transform hover:-translate-y-2 hover:scale-105 pulseGlow">
           Join the Waitlist
         </a>
-        <a href="https://femdem.gumroad.com" target="_blank" class="text-white border border-white/50 px-10 py-4 rounded-xl text-lg font-medium hover:bg-white/10 transition">
-          See My Other Apps →
+        <a href="https://femdem.gumroad.com" target="_blank" class="text-white border-2 border-white/50 px-12 py-5 rounded-2xl text-xl font-medium hover:bg-white/10 transition transform hover:scale-105">
+          Explore My Other Apps →
         </a>
       </div>
-      <div class="mt-16 max-w-5xl mx-auto fade-in" :class="{ 'visible': visible }" style="transition-delay: 0.6s;">
-        <img src="https://via.placeholder.com/1400x900/1e293b/94a3b8?text=PocketWiki+Teaser+with+Graph" alt="PocketWiki Teaser" class="rounded-2xl shadow-2xl border border-slate-700 opacity-90">
+      <div class="mt-20 max-w-6xl mx-auto stagger" style="animation-delay: 1.4s;">
+        <img src="https://via.placeholder.com/1600x1000/1e293b/94a3b8?text=PocketWiki+Graph+View+Teaser" alt="PocketWiki Teaser" class="rounded-3xl shadow-2xl border-4 border-primary/20 hover:border-primary transition-all duration-500 card-hover">
       </div>
     </div>
   </section>
 
-  <!-- Features Teaser -->
-  <section id="features" class="py-20 px-6 bg-white dark:bg-slate-900">
+  <!-- Features -->
+  <section id="features" class="py-24 px-6 bg-white dark:bg-slate-900">
     <div class="max-w-7xl mx-auto text-center">
-      <h2 class="text-4xl font-bold mb-16">What Makes PocketWiki Unmatched</h2>
+      <h2 class="text-4xl md:text-5xl font-bold mb-20 stagger">What Makes PocketWiki Unmatched</h2>
       <div class="grid md:grid-cols-3 gap-12">
-        <div class="text-center card-hover fade-in" x-data="{ visible: false }" x-intersect.once="visible = true">
-          <div class="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl">🔒</div>
-          <h3 class="text-2xl font-semibold mb-4">Absolute Privacy</h3>
-          <p class="text-gray-600 dark:text-gray-400">100% local storage. No data ever leaves your device.</p>
+        <div class="card-hover stagger" style="animation-delay: 0.2s;">
+          <div class="bg-primary/10 w-20 h-20 rounded-full mx-auto mb-8 flex items-center justify-center text-4xl">🔒</div>
+          <h3 class="text-3xl font-bold mb-4">Absolute Privacy</h3>
+          <p class="text-lg text-gray-600 dark:text-gray-400">100% local. No data ever leaves your device. True offline freedom.</p>
         </div>
-        <div class="text-center card-hover fade-in" x-data="{ visible: false }" x-intersect.once="visible = true" style="transition-delay: 0.2s;">
-          <div class="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl">🧠</div>
-          <h3 class="text-2xl font-semibold mb-4">AI-Powered Graph</h3>
-          <p class="text-gray-600 dark:text-gray-400">Visualize and interact with your knowledge network like never before.</p>
+        <div class="card-hover stagger" style="animation-delay: 0.4s;">
+          <div class="bg-primary/10 w-20 h-20 rounded-full mx-auto mb-8 flex items-center justify-center text-4xl">🧠</div>
+          <h3 class="text-3xl font-bold mb-4">Interactive Knowledge Graph</h3>
+          <p class="text-lg text-gray-600 dark:text-gray-400">See your ideas connected in real-time. Drag, zoom, discover patterns.</p>
         </div>
-        <div class="text-center card-hover fade-in" x-data="{ visible: false }" x-intersect.once="visible = true" style="transition-delay: 0.4s;">
-          <div class="bg-green-100 dark:bg-green-900/30 w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl">⚡</div>
-          <h3 class="text-2xl font-semibold mb-4">Blazing Speed</h3>
-          <p class="text-gray-600 dark:text-gray-400">Native Windows app for instant search and seamless editing.</p>
+        <div class="card-hover stagger" style="animation-delay: 0.6s;">
+          <div class="bg-primary/10 w-20 h-20 rounded-full mx-auto mb-8 flex items-center justify-center text-4xl">⚡</div>
+          <h3 class="text-3xl font-bold mb-4">Native Speed</h3>
+          <p class="text-lg text-gray-600 dark:text-gray-400">Blazing fast search and editing. Built for Windows power users.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Comparison -->
-  <section id="comparison" class="py-20 px-6 bg-gray-50 dark:bg-slate-800">
+  <section id="comparison" class="py-24 px-6 bg-gray-50 dark:bg-slate-800">
     <div class="max-w-7xl mx-auto">
-      <h2 class="text-4xl font-bold text-center mb-16">Why PocketWiki Wins</h2>
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-20">PocketWiki vs. The Competition</h2>
       <div class="overflow-x-auto">
-        <table class="w-full max-w-5xl mx-auto text-left border-collapse shadow-2xl rounded-lg overflow-hidden">
+        <table class="w-full max-w-6xl mx-auto text-left border-collapse shadow-2xl rounded-2xl overflow-hidden">
           <thead class="bg-primary text-white">
             <tr>
-              <th class="py-4 px-6"></th>
-              <th class="py-4 px-6 text-center font-bold">PocketWiki (PC)</th>
-              <th class="py-4 px-6 text-center">Obsidian</th>
-              <th class="py-4 px-6 text-center">Logseq</th>
-              <th class="py-4 px-6 text-center">Notion</th>
+              <th class="py-6 px-8 text-lg"></th>
+              <th class="py-6 px-8 text-center text-2xl font-bold">PocketWiki (PC)</th>
+              <th class="py-6 px-8 text-center">Obsidian</th>
+              <th class="py-6 px-8 text-center">Logseq</th>
+              <th class="py-6 px-8 text-center">Notion</th>
             </tr>
           </thead>
           <tbody class="text-gray-700 dark:text-gray-300">
             <tr class="border-b dark:border-slate-700">
-              <td class="py-6 px-6 font-medium">Native Performance</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center">Electron</td>
-              <td class="py-6 px-6 text-center">Electron</td>
-              <td class="py-6 px-6 text-center">Web/App</td>
+              <td class="py-8 px-8 font-medium text-lg">Native Windows Performance</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center">Electron</td>
+              <td class="py-8 px-8 text-center">Electron</td>
+              <td class="py-8 px-8 text-center">Web/App</td>
             </tr>
             <tr class="border-b dark:border-slate-700">
-              <td class="py-6 px-6 font-medium">True Offline</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center text-red-600">Cloud-first</td>
+              <td class="py-8 px-8 font-medium text-lg">True Offline by Default</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center text-red-600 text-2xl">Cloud-first</td>
             </tr>
             <tr class="border-b dark:border-slate-700">
-              <td class="py-6 px-6 font-medium">Built-in Graph</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Plugins</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center text-red-600">No</td>
+              <td class="py-8 px-8 font-medium text-lg">Built-in Knowledge Graph</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Plugins</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center text-red-600 text-2xl">No</td>
             </tr>
             <tr class="border-b dark:border-slate-700">
-              <td class="py-6 px-6 font-medium">No Plugins Needed</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
-              <td class="py-6 px-6 text-center text-red-600">Heavy</td>
-              <td class="py-6 px-6 text-center text-red-600">Some</td>
-              <td class="py-6 px-6 text-center">N/A</td>
+              <td class="py-8 px-8 font-medium text-lg">No Plugins Required</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
+              <td class="py-8 px-8 text-center text-red-600 text-2xl">Heavy</td>
+              <td class="py-8 px-8 text-center text-red-600 text-2xl">Some</td>
+              <td class="py-8 px-8 text-center">N/A</td>
             </tr>
             <tr>
-              <td class="py-6 px-6 font-medium">Version History</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Built-in</td>
-              <td class="py-6 px-6 text-center">Plugins</td>
-              <td class="py-6 px-6 text-center">Basic</td>
-              <td class="py-6 px-6 text-center text-green-600 dark:text-green-400 font-bold">Yes</td>
+              <td class="py-8 px-8 font-medium text-lg">Atomic Saves & Version History</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Built-in</td>
+              <td class="py-8 px-8 text-center">Plugins</td>
+              <td class="py-8 px-8 text-center">Basic</td>
+              <td class="py-8 px-8 text-center text-green-600 dark:text-green-400 text-2xl font-bold">Yes</td>
             </tr>
           </tbody>
         </table>
@@ -161,40 +173,40 @@
   </section>
 
   <!-- Other Apps -->
-  <section id="other-apps" class="py-20 px-6 bg-white dark:bg-slate-900">
+  <section id="other-apps" class="py-24 px-6 bg-white dark:bg-slate-900">
     <div class="max-w-7xl mx-auto">
-      <h2 class="text-4xl font-bold text-center mb-16">Discover My Other Tools</h2>
-      <div class="grid md:grid-cols-4 gap-8">
-        <div class="card-hover bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-all duration-300">
-          <h3 class="text-xl font-bold mb-3 text-primary">CleanClip</h3>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">Smart clipboard manager for clean pasting.</p>
-          <a href="https://femdem.gumroad.com/l/pcyuu" target="_blank" class="text-primary font-medium hover:underline">Get Now →</a>
+      <h2 class="text-4xl md:text-5xl font-bold text-center mb-20">Discover My Other Tools</h2>
+      <div class="grid md:grid-cols-4 gap-12">
+        <div class="card-hover bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 rounded-3xl p-8 border border-primary/20">
+          <h3 class="text-2xl font-bold mb-4 text-primary">CleanClip</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">Smart clipboard manager — paste clean, copy safe.</p>
+          <a href="https://femdem.gumroad.com/l/pcyuu" target="_blank" class="text-primary font-bold hover:underline text-lg">Get CleanClip →</a>
         </div>
-        <div class="card-hover bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-all duration-300">
-          <h3 class="text-xl font-bold mb-3 text-primary">Price Phantom V2 Lite</h3>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">Lightweight deal alert app.</p>
-          <a href="https://femdem.gumroad.com/l/uojiib" target="_blank" class="text-primary font-medium hover:underline">Get Now →</a>
+        <div class="card-hover bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 rounded-3xl p-8 border border-primary/20">
+          <h3 class="text-2xl font-bold mb-4 text-primary">Price Phantom V2 Lite</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">Lightweight automated deal alerts.</p>
+          <a href="https://femdem.gumroad.com/l/uojiib" target="_blank" class="text-primary font-bold hover:underline text-lg">Get V2 Lite →</a>
         </div>
-        <div class="card-hover bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-all duration-300">
-          <h3 class="text-xl font-bold mb-3 text-primary">Price Phantom</h3>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">Real-time deal scanner subscription.</p>
-          <a href="https://femdem.gumroad.com/l/misjw" target="_blank" class="text-primary font-medium hover:underline">Get Now →</a>
+        <div class="card-hover bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 rounded-3xl p-8 border border-primary/20">
+          <h3 class="text-2xl font-bold mb-4 text-primary">Price Phantom</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">Real-time deal scanner subscription.</p>
+          <a href="https://femdem.gumroad.com/l/misjw" target="_blank" class="text-primary font-bold hover:underline text-lg">Subscribe →</a>
         </div>
-        <div class="card-hover bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 transition-all duration-300">
-          <h3 class="text-xl font-bold mb-3 text-primary">Price Phantom Lifetime</h3>
-          <p class="text-gray-600 dark:text-gray-400 mb-4">Lifetime access to deal scanning.</p>
-          <a href="https://femdem.gumroad.com/l/rbyedf" target="_blank" class="text-primary font-medium hover:underline">Get Now →</a>
+        <div class="card-hover bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 rounded-3xl p-8 border border-primary/20">
+          <h3 class="text-2xl font-bold mb-4 text-primary">Price Phantom Lifetime</h3>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">One-time payment for unlimited scanning.</p>
+          <a href="https://femdem.gumroad.com/l/rbyedf" target="_blank" class="text-primary font-bold hover:underline text-lg">Get Lifetime →</a>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-slate-900 text-gray-400 py-12 px-6">
+  <footer class="bg-slate-900 text-gray-400 py-16 px-6">
     <div class="max-w-7xl mx-auto text-center">
-      <p class="mb-4 text-xl font-bold text-white">PocketWiki (PC) — The Future of Personal Wikis</p>
-      <p class="mb-4">Follow <a href="https://x.com/femdemdev" target="_blank" class="underline hover:text-primary">@femdemdev</a> for launch updates</p>
-      <p class="mb-2">All apps available at <a href="https://femdem.gumroad.com" target="_blank" class="underline hover:text-primary">femdem.gumroad.com</a></p>
+      <p class="text-2xl font-bold text-white mb-6">PocketWiki (PC) — The Future of Personal Knowledge</p>
+      <p class="mb-6 text-lg">Follow <a href="https://x.com/femdemdev" target="_blank" class="text-primary underline hover:text-white">@femdemdev</a> for launch updates</p>
+      <p class="mb-4">All tools available at <a href="https://femdem.gumroad.com" target="_blank" class="text-primary underline hover:text-white">femdem.gumroad.com</a></p>
       <p>© 2026 Femdem. All rights reserved.</p>
     </div>
   </footer>
